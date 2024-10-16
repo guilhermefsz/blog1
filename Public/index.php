@@ -1,14 +1,16 @@
 <?php
 include "./../App/configuracao.php";
-include "./../App/Libraries/Rota.php";
-include "./../App/Libraries/Controller.php";
-include "./../App/Libraries/Database.php";
+include "./../App/Autoload.php";
 
-$db = new Database;
+//$db = new Database;
+
+/*
 $db->query("SELECT * FROM posts");
 foreach($db->resultados() as $post){
     echo $post->titulo. ' | '.$post->texto.'<br>';
 }
+*/
+
 /*
 $db->query("SELECT * FROM posts ORDER BY id DESC");
 $db->resultado();
