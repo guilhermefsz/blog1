@@ -6,11 +6,6 @@ class Usuarios extends Controller{
         $this->$usuarioModel = $this->model('Usuario');
     }
 
-    public
-        
-    
-
-
     public function cadastrar()
     {
 
@@ -80,5 +75,68 @@ class Usuarios extends Controller{
         endif;
 
         $this->view('usuarios/cadastrar', $dados);
+
+    }//fim da função cadastrar
+
+    
+    public function logar(){
+
+        $formulario = filter_input_array(INPUT_POST, FILTER_SANITIZE_SPECIAL_CHARS);
+        if (isset($formulario)) :
+            $dados = [
+                'email' => trim($formulario['email']),
+                'senha' => trim($formulario['senha']),
+            ];
+
+            if (in_array("", $formulario)) :
+
+
+                if (empty($formulario['email'])) :
+                    $dados['email_erro'] = 'Preencha o campo e-mail';
+                endif;
+
+                if (empty($formulario['senha'])) :
+                    $dados['senha_erro'] = 'Preencha o campo senha';
+                endif;
+
+            else :
+
+                if (strlen($formulario['senha']) < 6) :
+                    $dados['senha_erro'] = 'A senha deve ter no minimo 6 caracteres';
+
+                else:
+                    $dados['senha'] = password_hash($formulario['senha'], PASSWORD_DEFAULT);
+                    if($this->usuarioModel->armazenar($dados)):
+                    echo 'Cadastro realizado com sucesso <hr>';
+                    else:
+                        die("Error ao logar usuário no sistema");
+                    endif;
+                endif;
+
+
+            endif;
+            /*
+            echo'senha original: '.$formulario['senha']."<hr>";
+            echo'senha MD5: '.md5($formulario['senha'])."<hr>";
+            echo '<hr>';
+            $senha_segura = password_hash($formulario['senha'],PASSWORD_DEFAULT);
+            echo'senha Hash: '.$senha_segura.'<hr>';
+            */
+
+            var_dump($formulario);
+        else :
+            $dados = [
+                'nome' => '',
+                'email' => '',
+                'senha' => '',
+                'confirma_senha' => '',
+            ];
+        endif;
+
+        $this->view('usuarios/cadastrar', $dados);
+
     }
-}
+    }
+
+
+
